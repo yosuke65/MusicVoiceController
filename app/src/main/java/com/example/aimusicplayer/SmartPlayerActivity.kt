@@ -17,8 +17,21 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import java.util.*
+import java.io.File
+
+import java.util.ArrayList
+
+import android.media.MediaPlayer
 import android.view.View
-import android.view.View.OnTouchListener
+
+import android.widget.Button
+
+import android.widget.ImageView
+
+import android.widget.TextView
+
+
+
 
 
 class SmartPlayerActivity : AppCompatActivity() {
@@ -28,13 +41,36 @@ class SmartPlayerActivity : AppCompatActivity() {
     private lateinit var speechRecognizerIntent: Intent
     private var keeper = ""
 
-    @SuppressLint("ClickableViewAccessibility")
+
+    private lateinit var pausePlayBtn: ImageView
+    private lateinit var nextBtn:ImageView
+    private lateinit var previousBtn:ImageView
+    private lateinit var songNameTxt: TextView
+
+    private lateinit var artwork: ImageView
+    private lateinit var lowerRelativeLayout: RelativeLayout
+    private lateinit var voiceEnabledBtn: Button
+    private var mode = "ON"
+
+    private val myMediaPlayer: MediaPlayer? = null
+    private val position = 0
+    private val mySongs: ArrayList<File>? = null
+    private val mSongName: String? = null
+
+    @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_smart_player)
 
         checkVoiceCommandPermission()
 
+        pausePlayBtn = findViewById(R.id.playPauseBtn)
+        previousBtn = findViewById(R.id.previousBtn)
+        nextBtn = findViewById(R.id.nextBtn)
+        artwork = findViewById(R.id.artwork)
+        lowerRelativeLayout = findViewById(R.id.lower)
+        voiceEnabledBtn = findViewById(R.id.voiceEnabledBtn)
+        songNameTxt = findViewById(R.id.songTitle)
         parentRelativeLayout = findViewById(R.id.parentRelativelayout);
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -87,6 +123,18 @@ class SmartPlayerActivity : AppCompatActivity() {
                 MotionEvent.ACTION_UP -> speechRecognizer.stopListening()
             }
             false
+        }
+
+        voiceEnabledBtn.setOnClickListener{
+            if(mode == "ON"){
+                mode = "OFF"
+                voiceEnabledBtn.text = "VOICE ENABLED MODE - $mode"
+                lowerRelativeLayout.visibility = View.VISIBLE
+            }else {
+                mode = "ON"
+                voiceEnabledBtn.text = "VOICE ENABLED MODE - $mode"
+                lowerRelativeLayout.visibility = View.GONE
+            }
         }
     }
 
