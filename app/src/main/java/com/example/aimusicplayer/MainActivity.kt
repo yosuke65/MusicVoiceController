@@ -1,6 +1,7 @@
 package com.example.aimusicplayer
 
 import android.Manifest
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -84,5 +85,14 @@ class MainActivity : AppCompatActivity() {
         }
         val arrayAdapter  = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items)
         mSongList.adapter = arrayAdapter
+
+        mSongList.setOnItemClickListener { adapterView, view, position, l ->
+            val songName = mSongList.getItemAtPosition(position).toString()
+            val intent = Intent(this, SmartPlayerActivity::class.java)
+            intent.putExtra("song", audioSongs)
+            intent.putExtra("name", songName)
+            intent.putExtra("position", position)
+            startActivity(intent)
+        }
     }
 }
